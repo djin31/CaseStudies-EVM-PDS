@@ -8,10 +8,6 @@
 \graphicspath{ {images/} }
 \usepackage[english]{babel}
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% Chapter quote at the start of chapter        %
-% Source: http://tex.stackexchange.com/a/53380 %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \makeatletter
 \renewcommand{\@chapapp}{}% Not necessary...
 \newenvironment{chapquote}[2][2em]
@@ -22,11 +18,6 @@
   {\par\normalfont\hfill--\ \chapquote@author\hspace*{\@tempdima}\par\bigskip}
 \makeatother
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% First page of book which contains 'stuff' like: %
-%  - Book title, subtitle                         %
-%  - Book author name                             %
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 % Book's title and subtitle
 \title{\Huge \textbf{EVM Design}}\\ 
@@ -130,7 +121,11 @@ Recently, a new unit called VVPAT was added to EVM to improve verifiability. Vot
 \end{figure}
 \\
 \section{Issues with the design}
-lack of encryption
+EVMs currently in use have a simplistic hardware design with software stored on ROM in order to prevent electrical reprogramming of software. However, even this simplistic device has certain vulnerabilities that can be exploited. Also the current design fails to ensure many of the features of the ideal EVM.
+
+\begin{itemize}
+\item \textbf{Lack of encryption} - The data is stored over the EVM in plain text format which makes it vulnerable to data leaks. If the attacker gets access to data then he can simply read it off any bits to ASCII converter.
+\end{itemize}
 
 \begin{thebibliography}{9}
 \bibitem{2Dto3D}
