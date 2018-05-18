@@ -30,7 +30,6 @@
 \maketitle
 
 \tableofcontents
-
 \mainmatter
 
 %%%%%%%%%%%
@@ -46,7 +45,9 @@ This is a document which details the features of an ideal EVM and discusses the 
 \section{Coercion freedom}
 We want the EVM to protect the voter's Right to Choice. We wish to ensure that the voter cannot be coerced by anybody to change his voting choice in an unfair way.
 \\
-This is closely tied to secrecy of vote as coercion freedom also means that nobody can determine with certainty to whom the voter voted by use of coercion.
+This is closely tied to secrecy of vote as coercion freedom also means that nobody can determine with certainty to whom the voter voted by use of coercion.   Voting  system  is  
+coercion free
+  if  additional information provided by the voting system  (and  the  procedures/process for using it), combined with any verifiable information  provided by the voter, does not improve an adversary’s guess on how the voter voted.
 
 \section{Secrecy}
 Secrecy that if the voter doesn't want to disclose to whom he/she voted, then it should not be possible for anyone to determine with certainty that who the voter voted for.
@@ -67,7 +68,15 @@ It should be possible to easily verify that the EVM is not tampered with. The au
 The data stored in EVM should be encrypted and cryptographically secure, so that any unauthorised third party cannot access it or tamper with it.
 
 \section{Auditable}
+Voting  system  is auditable if it provides verifiable information about  an election
+,   to  voters  and  the  general  public
+  that  can  be  used  to  determine  the  correctness  of  the  
+election outcome.  
+
 It should be provable that the EVM works without any bias. There should be a proof of correctness of the entire process of voting. It should be possible to audit the process of voting at any stage and detect discrepancies if any.
+
+\section{Usability and accessibility}
+The EVM should be universally usable by all including people with vision, auditory disabilities.
 
 \section{Self-certifiability}
 The hardware and software should be self certifiable and tamper detection should be possible if one of them is compromised.
@@ -75,7 +84,6 @@ The hardware and software should be self certifiable and tamper detection should
 \section{Protection from information leakage}
 The data stored inside the EVM should be protected from any kind of leakages. No third party should be able to access any sort of data from EVM during the process of voting and counting.
 
-\newpage
 \section{Constraints under which EVM are required to work}
 
 \begin{itemize}
@@ -115,7 +123,6 @@ of 64 candidates.\\
 Recently, a new unit called VVPAT was added to EVM to improve verifiability. Voter Verifiable Paper Audit Trail (VVPAT) or Verifiable Paper Record (VPR) is a method of providing feedback to voters using a ballotless voting system. A VVPAT is intended as an independent verification system for voting machines designed to allow voters to verify that their vote was cast correctly, to detect possible election fraud or malfunction, and to provide a means to audit the stored electronic results.
 \newpage
 \begin{figure}[!hb]
-\centering
 \includegraphics[scale=0.2]{FlowCurrent.PNG}
 \caption{The flow diagram of electoral voting process}
 \end{figure}
@@ -156,13 +163,15 @@ After a certain fixed number of votes or a fixed time interval whichever comes e
 
 Now comes the tricky part of dealing with disruption in network connecting a server to polling unit due to power outages or environment conditions. We achieve this through a \emph{blockchain based model}.
 
-We ensure that at all times the polling unit is connected to atleast one server, if this condition fails then we stall the machine there and notify it to the election officer on his authentication machine. Each remote server that receives the chunk of voting data advertises it to its peers and all the peers add it to their ledgers. Therafter, the standard blockchain procedure is followed to maintain the election data of the entire constituency in a peer-to-peer network of remote servers. 
+We ensure that at all times the polling unit is connected to atleast one server, if this condition fails then we stall the machine there and notify it to the election officer on his authentication machine. Each remote server that receives the chunk of voting data advertises it to its peers and all the peers add it to their ledgers. Therafter, we can  use any syncing algorithm to maintain uniformity across server data. The standard blockchain procedure is a reasonable choice to maintain the election data of the entire constituency in a peer-to-peer network of remote servers. 
 
 \subsection{Security of communication}
 To ensure security over communication links we implement a end-to-end encryption technique. We also improve security by placing servers behind a chain of NATs(Network Address Translators) so that no external entity can initiate a connection to server. Only the server initialises the connection to the authentication and polling units. The peer-to-peer network between servers is established through fixed predefined entries in the NAT.
 
+Also, the Polling units should also be configured to recognise only an array of devices as servers and transmit data only to them.
+
 \subsection{Verification of Polling units}
-The servers can also be used to check that the units are not compromised in any way. Each polling unit has a key embedded into the hardware of the unit. A corresponding complimentary key is available with the remote servers.
+The servers can also be used to check that the units are not compromised in any way. Each polling unit has a key embedded into the hardware(preferrably in the module containing processor) of the unit. A corresponding complimentary key is available with the remote servers.
 Every time the polling unit sends the data to server, the hardware computes a hash over the software of the EVM and the current time. This is first sent to the server and if the server can verify this hash with its complimentary key, then only the data sent by the polling unit is accepted. Computing hash with time included ensures that a previously computed hash cannot be reused.
 
 \subsection{Counting of votes}
@@ -170,19 +179,74 @@ This is a trivial process as at the end of the elections all the servers would b
 
 Also as a double check the usual EVM counting method can also be done to tally the votes.
 
-\section{Advantages}
-Verifiability
 
-Safety of data
+\section{How it meets expectations}
+\begin{itemize}
+\item \textbf{Coercion freedom} : The EVM doesn't leave any trail and there is nothing that a voter carries along with him which can identify whom he voted for. The proposed design is thus guaranteed to maintain atleast the same level of coercion freedom as the current design.
 
-Removes the vulnerability due to multiple units connected through physical link
+\item \textbf{Secrecy and Anonymity} : All the data stored in EVM is encrypted. The EVM can be queried for only the sum total of votes in the booth and the servers can be queried for only the sum total of votes for the constituency. Thus in no step the exact details of an individual voter can be accessed. 
+
+Since there is no link connecting the Control Unit and Polling unit, and  the functioning of Polling unit independently ensures that the process is more secretive than current design.
+
+\item \textbf{Non-repudiation} :
+Since the machine's hardware and software is verified and authorised after regular intervals we know that the machine is secure from tampering and proof of correctness of hardware that registers votes established at the time of design ensures that the actual registering of vote was non-repudiable.
+
+\item \textbf{Verifiability} :
+The verification of machine is done automatically through the server.
+
+We specifically do not allow verification of vote by the voter to prevent possible coercion which a voter may be put under to reveal his/her vote.
+
+\item \textbf{Cryptosecure} :
+As mentioned, the entire data as well as communication of the data is encrypted and thus cryptosecure if properly implemented.
+
+\item \textbf{Auditable} :
+The servers can be made to sync with each other the entire data and check for any discrepancy without any human intervention thereby allowing auditability.
+
+\item \textbf{Self-certifiability}
+The hardware and software of polling unit produce their dynamic time stamp based certificates time to time to the server through the hash used to establish the validation of voting data sent by polling unit.
+
+\item \textbf{Protection from information leakage} :
+The data stored inside the Polling units is broadcasted only to the servers already recognised and preconfigured. The servers cannot be accessed by any malicious attacker since NATs enforce that only the server can establish connection.
+
+End-to-end encryption ensures that an attacker cannot attack the system by pretending to be a node which he/she is not.
+
+\end{itemize}
+
+\section{How it builds over the existing design}
+\begin{itemize}
+\item The proposed design eliminates the issue of data loss entirely.
+
+\item The proposed design promises better verifiability of the machine.
+
+\item The new removes the need of controlling Polling unit through a manually operated Control unit, this reduces the problems that were there due to multiple units.
+
+\item The encryption of data ensures that data leaks are prevented and tampering or duplication of parts is not feasible.
+
+\item The entire source code and hardwa
+
+\end{itemize}
+\newpage
+\begin{figure}[!hb]
+\centering
+\includegraphics[scale=0.38]{seq_diagram.PNG}
+\caption{The sequence diagram of proposed electoral voting process}
+\end{figure}
+\newpage
+
+\section{The possible constraints for new design}
+\begin{itemize}
+\item \textbf{Higher battery needs} : Now since the EVM are supposed to communicate to the server and incorporation of defence mechanism for encryption means that the power consumption of EVM goes up and we require better battery power. However this is feasible since the current design was developed in 2000s and since then we have came a long way in affordability and feasibility of bigger and more powerful batteries.
+
+\item \textbf{Cost of setting up and maintenance}
+
+The more complex machinery of EVM and the server means that cost of procurement goes up significantly and will thus be an issue to consider.
+
+The initial cost of setting up the servers and configuring EVMs is high again, and it might be reasonable to use the existing design in areas of sparse population and remote areas.
+
+Overall cost of maintenance goes up for the process of electoral voting.
 
 
-\section{Constraints}
-Higher battery needs
-
-Cost
-
+\end{itemize}
 
 \begin{thebibliography}{9}
 \bibitem{2Dto3D}

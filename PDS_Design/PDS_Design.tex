@@ -1,0 +1,223 @@
+\documentclass[a4paper,12pt,openany]{book}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{hyperref}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\graphicspath{ {images/} }
+\usepackage[english]{babel}
+
+\makeatletter
+\renewcommand{\@chapapp}{}% Not necessary...
+\newenvironment{chapquote}[2][2em]
+  {\setlength{\@tempdima}{#1}%
+   \def\chapquote@author{#2}%
+   \parshape 1 \@tempdima \dimexpr\textwidth-2\@tempdima\relax%
+   \itshape}
+  {\par\normalfont\hfill--\ \chapquote@author\hspace*{\@tempdima}\par\bigskip}
+\makeatother
+
+
+% Book's title and subtitle
+\title{\Huge \textbf{PDS Design}}\\ 
+% Author
+\author{\textsc{Deepanshu Jindal}}\\
+
+\begin{document}
+
+\frontmatter
+\maketitle
+
+\tableofcontents
+\mainmatter
+
+%%%%%%%%%%%
+% Preface %
+%%%%%%%%%%%
+\chapter*{Preface}
+This is a document which details the expectations from an ideal Public Distribution System and discusses the problems with the current PDS in the country. Finally it looks upon a possible design of PDS which attempts to meet the expectations detailed in the first section.
+\\
+
+
+\chapter{What we expect from PDS}
+
+\section{Introduction}
+The Public Distribution System (PDS) \cite{PDS} evolved as a system for distribution of foodgrains at affordable prices and management of emergency situations. Over the years, the term PDS  has become synonymous with the term ‘food security’ and also an important part of Government’s policy for management of food economy in the country.
+
+The central and state governments shared the responsibility of regulating the PDS. While the central government is responsible for procurement, storage, transportation, and bulk allocation of food grains, state governments hold the responsibility for distributing the same to the consumers through the established network of Fair Price Shops (FPSs). State governments are also responsible for operational responsibilities including allocation and identification of families below poverty line, issue of ration cards, supervision and monitoring the functioning of FPSs.
+
+PDS forms a very crucial part of the National Food Security Act \cite{NFSA} introduced in 2013. Under the provisions of the act, households are classified into two categories : priority households and \emph{Antayodaya} households. The households falling under \emph{Antayodaya} are eligible for 35kg foodgrains while priority households are entitled to 15kg of foodgrains at the following prices:
+\begin{itemize}
+ \item Rice at ₹3 per kg \vspace{-3pt}
+ \item Wheat at ₹2 per kg \vspace{-3pt}
+ \item Coarse grains at ₹1 per kg. 
+\end{itemize}
+   
+At the same time, the PDS supports the agricultural sector as well. The government procures food grains from farmers at Minimum Support Price and provides them with decent price for their crops.
+
+\section{Shortcomings}
+However, the implementation of PDS has been marred by many shortcomings. We can classify the shortcomings majorly into the following categories:
+\begin{itemize}
+\item \textbf{Identity Fraud} - Identity fraud happens
+when a ration card is issued in the name of a person who does
+not exist (bogus card) or who already has a ration card (duplicates). 
+
+\item \textbf{Quantity and Quality fraud} - Quantity fraud occurs when a
+cardholder receives less than his or her due. While the quality fraud occurs when a PDS beneficiary receives inferior quality of grain than what he/she is entitled to. It is caused due to siphoning off of the food grains by the Fair price shop dealers and providing consumers with less quantity and/or inferior quality of grains.
+
+\item \textbf{Fake transactions} - Fair price shop dealers have often been found to carry out fake transactions of grains under bogus ration cards. 
+
+\item \textbf{Misclassification} - Misclassification of households into wrong category has limited the availability of the subsidy for the poorest of the households.
+\end{itemize}
+
+The quantity fraud and the fake transactions are the major causes that are responsible for the leakages of food grains from the system.
+
+Apart from these, there are leakages at each stage before the grains actually reach the distribution shops. There are leakages during procurement,storage and transportation of grains.
+
+\section{Expectations}
+A good PDS is expected to take into account all the three kinds of shortcomings and introduce checks to improve upon them.
+
+An important aspect of any good PDS is to maintain a digital record of all transactions to make the process more transparent and allow for introduction of a system of checks to curb the above shortcomings.
+
+We expect to have "Last mile Authentication" to curb fake transactions. However we want such authentication to have limited dependencies to allow for induction of the system in remotest of the areas.
+
+We expect to provide each household a distinct identification whose authentication can be established to prevent possibilities of identity fraud or bogus ration cards.
+
+We expect that the PDS incorporates a measure to keep a tab on atleast the quantity of food grain and also a measure for random quality checks.
+
+We want the PDS to maintain a dynamic easy-to-update demographic data to accommodate changes and keep a check on misclassification problem.
+
+\section{Attempt at digitization of records} 
+\begin{itemize}
+\item \textbf{Aadhaar based biometric authentication} \cite{Background} - With push from Central government this is being incorporated into PDS nationwide. Here, entitled persons are
+required to authenticate their fingerprint at the time of purchase. The process removes any duplicacy and curbs identity fraud. At the same time it limits the fake transactions possible by the dealer. 
+
+However, the backend infrastructure required to run this is massive. For a successful transaction, it requires electricity,
+connectivity, functional servers and fingerprint authentication to work, all at the same time. This is a challenge in itself. The failure of biometric authentication due to technological concerns is also an important vulnerability for this model.
+
+\item \textbf{QR coded Smart Cards} \cite{AuthPDS} -  This was adopted in few districts of Tamil Nadu. These smart cards are fed into ePOS(Point of Sale) machines which generate a receipt on authentication. This does away with the large requirements which were there in ABBA and provides faster and more reliable transactions while avoiding vulnerabilities of biometric authentication failure which were there in ABBA.
+
+\item \textbf{CORE PDS} \cite{CORE PDS} Centralised Online Real-Time Electronic (CORE) Public Distribution System (PDS) was introduced in the state of Chhatisgarh.With the introduction of CORE-PDS, ration cardholders were provided with a smartcard along with their paper ration card. An ePOS machine has been installed at each FPS. The smartcard stores the details of the beneficiary, their family and their monthly entitlements. The ePOS machine is connected to a server (at the National Informatics Centre), where all the records are stored.
+
+The cardholders can approach any FPS near their house. The smartcard has to be inserted into the E-POS machine; the machine reads the card, fetches the data from the server, verifies the data, and displays the monthly entitlements of the beneficiary on the machine. 
+
+\end{itemize}
+\chapter{Proposed Design}
+
+\section{Background and Intuition}
+Most of the current designs in place target the problem of identity fraud, while doing little about the quantity fraud being done by the dealers. However, the issue is that identity fraud makes up a very small chunk of the leakages. Therefore it is clear that something needs to be done to tackle the quantity fraud.
+
+Limited power in the hands of consumers also make them vulnerable to fraud by the dealers. So empowerment of consumers is the way to go.
+
+Also we require something to check the movement of grains at each level of hierarchy to maintain a system of checks and balances.
+
+The CORE PDS design \cite{Design} adopted in Chhattisgarh promises a lot in these regards and so we use it as a case study for our design.
+
+With tight constraints over electricity availability it is also necessary to provide machines with alternative forms of energy.
+
+\section{Features and Specifications}
+\subsection{Empowering Consumers}
+In the proposed design, we provide each beneficiary household with a smart ration card(similar to the one introduced in CORE PDS) that will be used for carrying out all PDS transactions through an electronic Point of Sales machine. The consumer shall be free to carry out these transactions at any Fair Price shops within a fixed threshold radius. 
+
+The ePoS at all the Fair Price shops within the domain of the consumer\footnote{A special consideration can be done for those whose names are not registered on the machine at a time due to migration or some other issue such as unavailability at local FPS. They can be allowed to have a transaction on exemption basis with their names separately recorded and transaction synced later on. If any discrepancy or duplication is found then their quota for next month can be penalised.} shall carry authentication details of the beneficiary in an encrypted form. To carry out any transaction the consumer has to go to the shop insert his card, enter his pin and ask for his entitled supply. The ePoS authenticates the card\footnote{In case a consumer is not able to produce his/her card then provision can be made for him/her to get the grains from the local FPS which has been assigned to him/her} and reads out the entitlements aloud in the regional language, Hindi and English.
+
+The ePoS is attached to a customised weighing machine wherein the grains are weighed. Only after successful weighing the ePoS registers the transaction. It prints out receipt to be given to the consumer, reads out the amount to be paid and enters the details of transaction on the card memory. \\
+
+\textbf{Advantages}
+\begin{itemize}
+\item It helps in breaking monopoly of FPS dealers. The consumers are free to choose amongst the FPS near them and helps in establishing a somewhat competitive market.
+
+\item Attaching of ePoS though doesn't guarantee that the transaction is free from quantity fraud, but atleast tightens the hole of leakage a bit.
+
+\item Reading aloud of entitlements and amount to be paid reduces the scope of information asymmetry between the consumer and the dealer.
+
+\item Entering of details into the card ensure that duplicate transaction at different FPS cannot be carried out.
+
+\item Since ePoS has stored data of cards on them we can get around the need of internet connectivity at all times. Delayed syncing of data subject to availability of connectivity can be done.
+
+\item The method of exemption ensures that food is available to everyone and nobody has to suffer due to failure of transaction or delay in syncing of demographic data\\
+
+\end{itemize}
+
+
+\subsection{Digitization of transactions at all level}
+The digitization of transactions between the dealer and the consumers has shown significant improvement in status of PDS. So it is natural to extend this to all levels.
+
+To counter the leakages in different stages of supply chain it is necessary to impose some transaction costs at each level. \cite{Transport} (To avoid the hassle which would be added we can make these costs in principle which are to be added into ledger and cleared off on further transactions.)
+
+The model proposed involves that when food grains are supplied to a level down in the supply chain, the beneficiary makes the payment of the food grains at market price to the level above it. At the end, a payment corresponding to the difference in market price and subsidized price is made to the last level of supply that is the FPS dealers. This requires only the dealer to have a bank account instead of the other techniques of cash transfer in which all the end consumers are expected to have a bank account which is a difficult goal to attain.
+
+We track delivery of grains and offloading of grains at the Fair Price Shops through ePoS.
+In the proposed design, the ePoS also tracks the quantity of grain supplied to the dealer. The ePoS manages the inventory of the dealer by taking into account the transactions done at the store and notifies him when the inventory runs below a certain threshold. Then the dealer can apply for fresh supply of grains. This application for supply is not limited to monthly basis but on need basis.
+
+Through digitization we can also monitor the sales at a FPS shop. The dealer with good sales at FPS can be verified and provided with incentives. \\
+
+\textbf{Advantages}
+\begin{itemize}
+\item This practice imposes on the supervisors of any stage, ownership and accountability to store and transfer the foodgrains to the next stage.
+\item The transactions registered at each level make the process more transparent and the implicitly provides a mechanism to digitse the records.
+\item Creates a competition amongst the dealers to up their services in order to gain consumers and earn the incentives. This stimulates a competitive market in the sector. 
+\item This allows opportunity to weed out poorly performing FPS by running checks and inspection on them.
+\end{itemize}
+
+\subsection{Introduction of Self Help Community reforms}
+Various NGOs or community appointed workers can be trained to operate ePoS and allowed to run FPS, thereby introducing the benefits of self help reforms into the sector.
+
+Also the people in Panchayats can be taught about the working of ePoS and about their rights which can be further propagated forward to ensure increased awareness about consumer rights.
+
+\subsection{Updation and Renewal of Smart cards}
+To take into account the changing demographics Government Public sector entities like Post Offices or Schools can be provided with machines to authenticate and add/update the details of a cardholder.
+
+In case of lost smartcards the beneficiary can provide his details and identification documents. Thereafter his previous card shall be cancelled and a new one would be made in his name.
+
+It is also important to tackle the problem of duplication, therefore the making of smart cards for the first time can be based on biometric registration of the head of the household in order to prevent multiple issuance of smartcards to the same household.
+
+\subsection{Check on transportation}
+This has been adopted in a few states, and has proven to be quite successful with little inputs required.
+
+The PDS trucks are painted of a distinct colour and helpline numbers are embossed on them. If anyone finds the truck parked at a wrong place then they can report it by calling the helpline number. With proper awareness this can be a great success as shown by states like Chhattisgarh. 
+
+Also geotacking of individual grainsacks can help in ensuring that proper quantities reach uptil the dealer.
+
+\section{Constraints and hurdles}
+\begin{itemize}
+\item \textbf{Limited availability of electricity} - With limited availability of electricity in rural areas, operation of electronic weighing machine and ePoS remains an issue.
+
+This can be tackled by solar operated ePoS alongwith solar powered weighing machine(which already exist in the market).
+
+\item \textbf{Limited protection against malpractices by FPS dealers through cartel} - There can be incidents when the dealers in an area form a consortium and resort to malpractices. 
+
+To tackle this there is a strong need for spreading awareness about consumer rights and complaints redressal mechanisms.
+
+\item \textbf{Misclassification of households} - The issue of misclassification of households into various entitlement categories still persists.
+
+Periodic reconfirmation of data based upon surveys of NSS and IHDS can be done to work upon this situation.
+
+Also attempts to increase the coverage can be made over time to ensure that atleast the ones who are desperately dependent on PDS for food are not deprived of it.
+\end{itemize}
+
+\begin{thebibliography}{9}
+\bibitem{PDS}
+\url{https://en.wikipedia.org/wiki/Public_distribution_system}
+
+\bibitem{NFSA}
+\url{https://en.wikipedia.org/wiki/National_Food_Security_Act,_2013}
+
+\bibitem{Background}
+Aadhaar and Food Security in Jharkhand \emph{Jean Drèze, Nazar Khalid, Reetika Khera, Anmol Somanchi}
+
+\bibitem{CORE PDS}
+CORE PDS: Empowering with Portability
+\url{http://negd.gov.in/core-pds-chhattisgarh}
+
+\bibitem{Transport}
+End-to-end solutions for food supply 
+\url{https://www.thehindubusinessline.com/opinion/columns/End-to-end-solutions-for-food-supply/article20882571.ece}
+\bibitem{AuthPDS}
+Smarter than Aadhaar: Govt's insistence on
+disruptive option is bewildering\emph{Reetika Khera}
+
+\bibitem{Design}
+http://indiatogether.org/core-pds-smart-system-in-raipur-chhattisgarh-food-security-portability-government
+\end{document}
