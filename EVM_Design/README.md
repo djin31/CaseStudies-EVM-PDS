@@ -1,2 +1,2 @@
 # EVM_Design
-A brief on features and expectations from ideal EVM and PDS implementations and a design attempt to meet them
+A brief on features of an ideal EVM and a design attempt to meet them
